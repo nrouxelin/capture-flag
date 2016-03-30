@@ -86,7 +86,6 @@ public class MazeGenerator {
 			voisins[3] = wasVisited(col+1,lig);
 
 			if(voisins[0] && voisins[1] && voisins[2] && voisins[3]){
-				//Attention dépile alors qu'il ne faut pas !!!
 				pile.pop();
 			}else{
 				Collections.shuffle(choix);
