@@ -115,7 +115,7 @@ public class MazeGenerator {
 	
 
 	/**
-	 * Teste si un cellcule appartient au labyrinthe
+	 * Teste si une cellule appartient au labyrinthe
 	 * @param x bascisse
 	 * @param y ordonée
 	 * @return booléen
@@ -125,7 +125,7 @@ public class MazeGenerator {
 	}
 	
 	/**
-	 * Renvoie vrai si la cellule a été visité ou si elle n'appartient pas au labyrinthe
+	 * Renvoie vrai si la cellule a été visitée ou si elle n'appartient pas au labyrinthe
 	 * @param x abscisse
 	 * @param y ordonnée
 	 * @return booléen
@@ -153,6 +153,14 @@ public class MazeGenerator {
 			System.out.print("+---");
 		}
 		System.out.println("+");
+	}
+	
+	/**
+	 * Renvoie le labyrinthe
+	 * @return
+	 */
+	public byte[][] getMaze(){
+		return(this.maze);
 	}
 
 	/**
