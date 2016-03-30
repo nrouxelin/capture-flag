@@ -54,7 +54,7 @@ public class MazeGenerator {
 		this.maze = new byte[lignes][colonnes];
 		
 		
-		generateMaze(2,3);
+		generateMaze(0,0);
 		
 	}
 	
@@ -70,10 +70,10 @@ public class MazeGenerator {
 		Coordonnees cellule = new Coordonnees(dx, dy);
 		pile.push(cellule);
 		while(!pile.empty()){
-			System.out.println(pile.size());
 			cellule = pile.peek();
 			int lig = cellule.getY();
 			int col = cellule.getX();
+			//System.out.println(lig+" "+col);
 			//On visite la case courante
 			if((this.maze[lig][col] & 16) == 0){
 				this.maze[lig][col] += 16;
@@ -84,9 +84,7 @@ public class MazeGenerator {
 			voisins[1] = wasVisited(col,lig+1);
 			voisins[2] = wasVisited(col-1,lig);
 			voisins[3] = wasVisited(col+1,lig);
-			System.out.println(Arrays.toString(voisins));
 
-			
 			if(voisins[0] && voisins[1] && voisins[2] && voisins[3]){
 				//Attention dépile alors qu'il ne faut pas !!!
 				pile.pop();
@@ -98,14 +96,14 @@ public class MazeGenerator {
 				}
 				switch(choix.get(i)){
 				case 0:
-					this.maze[lig][col] += 1;
-					this.maze[lig-1][col] += 2;
+					this.maze[lig][col] += 2;
+					this.maze[lig-1][col] += 1;
 					cellule.set(col,lig-1);
 					break;
 					
 				case 1:
-					this.maze[lig][col] += 2;
-					this.maze[lig+1][col] += 1;
+					this.maze[lig][col] += 1;
+					this.maze[lig+1][col] += 2;
 					cellule.set(col,lig+1);
 					break;
 					
@@ -122,6 +120,7 @@ public class MazeGenerator {
 					break;
 				}
 				pile.push(cellule);
+				//System.out.println("Cellule choisie :"+cellule.getX()+" "+cellule.getY());
 			}
 
 		}
@@ -130,11 +129,11 @@ public class MazeGenerator {
 
 	
 	private boolean belongsToMaze(int x, int y){
-		return (x > 0) && (x < this.colonnes-1) && (y > 0) && (y < this.lignes-1);
+		return (x >= 0) && (x <= this.colonnes-1) && (y >= 0) && (y <= this.lignes-1);
 	}
 	
 	private boolean wasVisited(int x, int y){
-		return (belongsToMaze(x, y) && (this.maze[y][x] >= 16)) || !belongsToMaze(x,y);
+		return (belongsToMaze(x,y) && (this.maze[y][x] & 16)!=0) || !belongsToMaze(x,y);
 	}
 	
 	public void display(){
