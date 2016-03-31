@@ -140,11 +140,11 @@ public class MazeGenerator {
 	public void display(){
 		for(int lig=0; lig<this.lignes; lig++){
 			for(int col=0;col<this.colonnes; col++){
-				System.out.print((this.maze[lig][col] & 2) == 0 ? "+---": "+   ");
+				System.out.print(isOpenOnTop(col,lig) ? "+---": "+   ");
 			}
 			System.out.println("+");
 			for(int col=0;col<this.colonnes; col++){
-				System.out.print((this.maze[lig][col] & 4) == 0 ? "|   ": "    ");
+				System.out.print(isOpenOnLeft(col,lig) ? "|   ": "    ");
 			}
 			System.out.println("|");
 			
@@ -162,12 +162,33 @@ public class MazeGenerator {
 	public byte[][] getMaze(){
 		return(this.maze);
 	}
+	
+	/**
+	 * Teste si le mur du haut est ouvert
+	 * @param x
+	 * @param y
+	 * @return booléen
+	 */
+	public boolean isOpenOnTop(int x, int y){
+		return((this.maze[y][x] & 2)==0);
+	}
+	
+	/**
+	 * Teste si le mur de gauche est ouvert
+	 * @param x
+	 * @param y
+	 * @return booléen
+	 */
+	public boolean isOpenOnLeft(int x, int y){
+		return((this.maze[y][x] & 4) == 0);
+	}
+	
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MazeGenerator lab = new MazeGenerator(8,8);
+		MazeGenerator lab = new MazeGenerator(16,16);
 		lab.display();
 	}
 
