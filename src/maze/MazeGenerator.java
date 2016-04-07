@@ -120,7 +120,7 @@ public class MazeGenerator {
 	 * @param y ordonée
 	 * @return booléen
 	 */
-	private boolean belongsToMaze(int x, int y){
+	public boolean belongsToMaze(int x, int y){
 		return (x >= 0) && (x <= this.colonnes-1) && (y >= 0) && (y <= this.lignes-1);
 	}
 	
@@ -140,11 +140,11 @@ public class MazeGenerator {
 	public void display(){
 		for(int lig=0; lig<this.lignes; lig++){
 			for(int col=0;col<this.colonnes; col++){
-				System.out.print(isOpenOnTop(col,lig) ? "+---": "+   ");
+				System.out.print(isClosedOnTop(col,lig) ? "+---": "+   ");
 			}
 			System.out.println("+");
 			for(int col=0;col<this.colonnes; col++){
-				System.out.print(isOpenOnLeft(col,lig) ? "|   ": "    ");
+				System.out.print(isClosedOnLeft(col,lig) ? "|   ": "    ");
 			}
 			System.out.println("|");
 			
@@ -169,7 +169,7 @@ public class MazeGenerator {
 	 * @param y
 	 * @return booléen
 	 */
-	public boolean isOpenOnTop(int x, int y){
+	public boolean isClosedOnTop(int x, int y){
 		return((this.maze[y][x] & 2)==0);
 	}
 	
@@ -179,18 +179,7 @@ public class MazeGenerator {
 	 * @param y
 	 * @return booléen
 	 */
-	public boolean isOpenOnLeft(int x, int y){
+	public boolean isClosedOnLeft(int x, int y){
 		return((this.maze[y][x] & 4) == 0);
 	}
-	
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		MazeGenerator lab = new MazeGenerator(16,16);
-		lab.display();
-	}
-
 }
-;
