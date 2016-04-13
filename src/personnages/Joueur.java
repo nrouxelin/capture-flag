@@ -1,8 +1,9 @@
 package personnages;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.ImageIcon;
 
 import jeux.Fenetre;
 
@@ -12,7 +13,7 @@ import jeux.Fenetre;
  * Représente un personnage controlable par un joueur
  */
 public class Joueur extends Personnage {
-	int up, left, right, down;
+	private int up, left, right, down;
 	
 	/**
 	 * Constructeur de Joueur
@@ -27,16 +28,19 @@ public class Joueur extends Personnage {
 	 * @param left À gauche
 	 * @param right À droite
 	 */
-	public Joueur(Fenetre fen, Color couleur, int x, int y, int tailleCase, int delay, int up, int down, int left, int right){
-		super(fen, couleur, x,y,tailleCase, delay);
+	public Joueur(Fenetre fen, int num, int x, int y, int tailleCase, int delay, int up, int down, int left, int right){
+		super(fen, "Joueur"+num, x,y,tailleCase, delay);
 		this.fen.addJoueur();
 		this.up=up;
 		this.down=down;
 		this.right=left;
 		this.left=right;
+		for(int i=1;i<=5;i++){
+			this.sprites.add(new ImageIcon("images/"+this.nomSprite+"/Mort"+i+".png").getImage());
+		}
 		this.fen.addKeyListener(new ClavierListener());
 	}
-
+	
 	/**
 	 * 
 	 * @author Meuleman
@@ -59,4 +63,5 @@ public class Joueur extends Personnage {
 			}
 		}
 	}
+	
 }

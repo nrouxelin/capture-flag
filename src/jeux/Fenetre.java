@@ -1,10 +1,10 @@
 package jeux;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import maze.MazeGenerator;
 import personnages.Ennemi;
@@ -22,9 +22,9 @@ public class Fenetre extends JFrame{
 	 * Constantes
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int tailleCase = 4*10; //taille d'une case en pixels (doit être multiple de 4 pour placer les joueurs au centre)
+	private static final int tailleCase = 4*14; //taille d'une case en pixels (doit être multiple de 4 pour placer les joueurs au centre)
 	private static final int nbCases = 2*8+1; //nombre de cases du labyrinthe (doit être impaire si l'on souhaite placer le drapeau au centre)
-	private static final int delay = 200; //temps entre deux mouvements des joueurs
+	private static final int delay = 300; //temps entre deux mouvements des joueurs
 	private static final int refresh=10; //temps entre deux raffrachissement de l'affichage
 	private static final int[] flag={nbCases/2,nbCases/2}; //Emplacement du drapeau (ici au centre)
 	
@@ -35,33 +35,33 @@ public class Fenetre extends JFrame{
 	private int nbJoueurs=0;
 	private boolean running = true;
 	private int tailleFenetre=tailleCase*nbCases;
-	private String message="Capture-Flag";
+	private String message="";
 	
 	public Fenetre(){
-		this.setTitle(message); 
-		this.setSize(tailleFenetre+15, tailleFenetre+37); 
+		this.setTitle("Capture-flag"); 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
 		
 		/**
 		 * Les personnages joueurs
 		 */
-		tabPers.add(new Joueur(this, Color.red, 0, 0, tailleCase, delay, KeyEvent.VK_Z, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_D));
+		tabPers.add(new Joueur(this, 1, 0, 0, tailleCase, delay, KeyEvent.VK_Z, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_D));
 		//tabPers.add(new Joueur(this, Color.green, nbCases-1, 0, tailleCase, delay, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD6));
 		//tabPers.add(new Joueur(this, Color.cyan, 0, nbCases-1, tailleCase, delay, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_K, KeyEvent.VK_M));
-		tabPers.add(new Joueur(this, Color.blue, nbCases-1, nbCases-1, tailleCase, delay, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT));
+		tabPers.add(new Joueur(this, 2, nbCases-1, nbCases-1, tailleCase, delay, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT));
 
 		/**
 		 * Les ennemis non-joueurs
 		 */
-		tabPers.add(new Ennemi(this, Color.magenta, nbCases/4, nbCases/4, tailleCase, delay));
-		tabPers.add(new Ennemi(this, Color.magenta, 3*nbCases/4, 3*nbCases/4, tailleCase, delay));
-		tabPers.add(new Ennemi(this, Color.magenta, 3*nbCases/4, nbCases/4, tailleCase, delay));
-		tabPers.add(new Ennemi(this, Color.magenta, nbCases/4, 3*nbCases/4, tailleCase, delay));
+		tabPers.add(new Ennemi(this, "ennemi", 0, nbCases-1, tailleCase, delay));
+		tabPers.add(new Ennemi(this, "ennemi", nbCases-1, 0, tailleCase, delay));
+		//tabPers.add(new Ennemi(this, "ennemi", 3*nbCases/4, nbCases/4, tailleCase, delay));
+		//tabPers.add(new Ennemi(this, "ennemi", nbCases/4, 3*nbCases/4, tailleCase, delay));
 		
 		this.pan=new Panneau(tailleCase, nbCases, tailleFenetre, tabPers, lab, flag); //Initialisation du panneau pan d'affichage
 		this.setContentPane(pan); //Affichage du panneau pan sur la fenetre 
+		this.setSize(tailleFenetre+16, tailleFenetre+38); 
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 				
 		while(running){ //Boucle de raffrachissement de l'affichage
 			try{
@@ -75,6 +75,9 @@ public class Fenetre extends JFrame{
 			}
 			pan.rafraichir(tabPers);
 		}
+		if(!running){
+			JOptionPane.showMessageDialog(null, message, "Fin du jeu", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	
 	/**
@@ -83,7 +86,7 @@ public class Fenetre extends JFrame{
 	 */
 	private void testWon(int i){ 
 		if((tabPers.get(i).getX()==flag[0])&&(tabPers.get(i).getY()==flag[1])){
-			message=message + " ; Joueur "+tabPers.get(i).getCouleur()+" a gagné";
+			message=message +tabPers.get(i)+" a gagné \n";
 			retirerJoueur(i);
 		}
 	}
@@ -93,10 +96,12 @@ public class Fenetre extends JFrame{
 	 * @param i Indice du joueur
 	 */
 	private void testLost(int i){
-		for(int j=nbJoueurs;j<tabPers.size();j++){
-			if((tabPers.get(i).getX()==tabPers.get(j).getX())&&(tabPers.get(i).getY()==tabPers.get(j).getY())){
-				message=message + " ; Joueur "+tabPers.get(i).getCouleur()+" a perdu";
-				retirerJoueur(i);
+		if(tabPers.get(i).getEnVie()){
+			for(int j=nbJoueurs;j<tabPers.size();j++){
+				if((tabPers.get(i).getX()==tabPers.get(j).getX())&&(tabPers.get(i).getY()==tabPers.get(j).getY())&&(tabPers.get(i).getEnVie())){
+					message=message + tabPers.get(i)+" a perdu \n";
+					tabPers.get(i).mourir(i);
+				}
 			}
 		}
 	}
@@ -105,15 +110,12 @@ public class Fenetre extends JFrame{
 	 * Retire un joueur et met à jour le titre de la fenetre
 	 * @param i Indice du joueur
 	 */
-	private void retirerJoueur(int i){
+	public void retirerJoueur(int i){
 		tabPers.remove(i);
 		nbJoueurs--;
-		if(nbJoueurs<1){ //Arret du jeu si il ne reste plus de joueurs
+		if(nbJoueurs<2){ //Arret du jeu si il ne reste plus qu'un joueurs
 			running=false;
-			message=message+" - Fin du jeu";
 		}
-		System.out.println(message);
-		this.setTitle(message);
 	}
 	
 	/**

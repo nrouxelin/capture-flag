@@ -1,7 +1,5 @@
 package personnages;
 
-import java.awt.Color;
-
 import jeux.Fenetre;
 
 /**
@@ -20,8 +18,8 @@ public class Ennemi extends Personnage implements Comportement{
 	 * @param tailleCase
 	 * @param delay
 	 */
-	public Ennemi(Fenetre fen, Color couleur, int x, int y, int tailleCase, int delay){
-		super(fen, couleur, x, y, tailleCase, delay);
+	public Ennemi(Fenetre fen, String nomSprite, int x, int y, int tailleCase, int delay){
+		super(fen, nomSprite, x, y, tailleCase, delay);
 		Thread t = new Thread(new LancerEnnemi());
 		t.start();
 	}

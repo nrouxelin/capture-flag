@@ -1,5 +1,8 @@
 package personnages;
-import java.awt.Color;
+import java.awt.Image;
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 import jeux.Fenetre;
 
@@ -13,9 +16,12 @@ public abstract class Personnage{
 	protected int x,y;//position dans la matrice carte
 	protected int posX,posY; //position sur la fenêtre
 	Fenetre fen;
-	protected Color couleur; //Couleur du personnage
+	protected ArrayList<Image> sprites = new ArrayList<Image>() ; 
+	protected boolean enVie=true;
+	protected Image sprite;
 	protected int delay;
 	protected int pause; 
+	protected String nomSprite;
 	
 	/**
 	 * Constructeur par défaut de Personnage
@@ -25,9 +31,10 @@ public abstract class Personnage{
 		this.x=0;
 		this.y=0;
 		this.pause=10;
-		this.couleur=Color.white;
-		this.posX=x*tailleCase+tailleCase/4;
-		this.posY=y*tailleCase+tailleCase/4;
+		this.sprites.add(new ImageIcon("images/defaut.png").getImage());
+		this.sprite=this.sprites.get(0);
+		this.posX=x*tailleCase+tailleCase/8;
+		this.posY=y*tailleCase+tailleCase/8;
 	}
 	
 	/**
@@ -39,14 +46,18 @@ public abstract class Personnage{
 	 * @param tailleCase taille d'une case du labyrinthe en pixels
 	 * @param delay temps entre deux mouvements
 	 */
-	public Personnage(Fenetre fen, Color couleur, int x, int y, int tailleCase, int delay){
+	public Personnage(Fenetre fen, String nomSprite, int x, int y, int tailleCase, int delay){
 		this.tailleCase=tailleCase;
-		this.couleur=couleur;
+		this.nomSprite=nomSprite;
+		for(int i=1;i<=3;i++){
+			this.sprites.add(new ImageIcon("images/"+this.nomSprite+"/pos"+i+".png").getImage());
+		}		
+		this.sprite=this.sprites.get(0);
 		this.fen=fen;
 		this.x=x;
 		this.y=y;
-		this.posX=x*tailleCase+tailleCase/4;
-		this.posY=y*tailleCase+tailleCase/4;
+		this.posX=x*tailleCase+tailleCase/8;
+		this.posY=y*tailleCase+tailleCase/8;
 		this.delay=delay;
 		this.pause=delay/tailleCase;
 	}
@@ -57,7 +68,7 @@ public abstract class Personnage{
 	 * @param dY En y
 	 */
 	protected synchronized void deplacer(int dX, int dY){
-		if(fen.moveIsOk(x,y,dX,dY)){
+		if(fen.moveIsOk(x,y,dX,dY)&&(enVie)){
 			Thread t = new Thread(new ThreadDeplacer(dX, dY));
 			t.start();
 		}
@@ -79,15 +90,56 @@ public abstract class Personnage{
 			for(int i=0; i<tailleCase; i++){
 				posX+=dX;
 				posY+=dY;
-				try {
-					Thread.sleep(pause);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				sprite=sprites.get(i%3);
+				fairePause(pause);
 			}
 		}
 	}
 	
+	//thread de mort
+	class ThreadMourir implements Runnable{
+		int ind;
+		
+		public ThreadMourir(int ind){
+			this.ind=ind;
+		}
+		
+		public void run(){
+			for(int i=3;i<8;i++){
+				sprite=sprites.get(i);
+				for(int j=0;j<3;j++){
+					sprites.set(j, sprites.get(i));
+				}
+				fairePause(delay);
+			}
+			fen.retirerJoueur(ind);			
+		}
+	}
+	
+	/**
+	 * fonction qui lance la mort d'un personnage
+	 * @param ind indice du joueur à tuer
+	 */
+	public void mourir(int ind){
+		enVie=false;
+		Thread t = new Thread(new ThreadMourir(ind));
+		t.start();
+	}
+	
+	private void fairePause(int temps){
+		try {
+			Thread.sleep(temps);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	/**
+	 * redéfinition de la méthode toString pour l'affichage
+	 */
+	public String toString(){
+		return nomSprite;
+	}
 	
 	/**
 	 * 
@@ -103,6 +155,10 @@ public abstract class Personnage{
 	 */
 	public int getPosY(){
 		return posY;
+	}
+	
+	public boolean getEnVie(){
+		return enVie;
 	}
 	
 	/**
@@ -123,10 +179,10 @@ public abstract class Personnage{
 	
 	/**
 	 * 
-	 * @return Couleur du personnage
+	 * @return sprite du personnage
 	 */
-	public Color getCouleur(){
-		return couleur;
+	public Image getSprite(){
+		return sprite;
 	}
 
 }

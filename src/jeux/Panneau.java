@@ -3,9 +3,11 @@ package jeux;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import maze.MazeGenerator;
@@ -23,6 +25,7 @@ public class Panneau extends JPanel{
 	BufferedImage buffImg;
 	Graphics2D gbi;
 	ArrayList<Personnage> tabPers;
+	private Image fond;
 	
 	/**
 	 * Constructeur de Panneau, stocke l'image de fond du labyrinthe dans buffImg puis l'affiche avec les personnages
@@ -39,6 +42,8 @@ public class Panneau extends JPanel{
 		gbi = buffImg.createGraphics();
 		gbi.setPaint(new Color(30,0,50));
 		gbi.fillRect(0, 0, tailleFenetre, tailleFenetre);
+		fond=new ImageIcon("images/fond.jpg").getImage();
+		gbi.drawImage(fond, 0, 0, null);
 		genererCarte(nbCases, lab, flag);
 		rafraichir(tabP);
 	}
@@ -83,10 +88,8 @@ public class Panneau extends JPanel{
 	public synchronized void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.drawImage(buffImg, 0, 0, null);
-		int tp1=tailleCase/2;
 		for(Personnage p : tabPers){
-			g2d.setColor(p.getCouleur());
-			g2d.fillOval(p.getPosX(), p.getPosY() , tp1, tp1);
+			g2d.drawImage(p.getSprite(),p.getPosX(), p.getPosY(),null);
 		}
 		
 	}
