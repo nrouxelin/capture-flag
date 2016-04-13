@@ -54,8 +54,8 @@ public class Fenetre extends JFrame{
 		 */
 		tabPers.add(new Ennemi(this, "ennemi", 0, nbCases-1, tailleCase, delay));
 		tabPers.add(new Ennemi(this, "ennemi", nbCases-1, 0, tailleCase, delay));
-		//tabPers.add(new Ennemi(this, "ennemi", 3*nbCases/4, nbCases/4, tailleCase, delay));
-		//tabPers.add(new Ennemi(this, "ennemi", nbCases/4, 3*nbCases/4, tailleCase, delay));
+		tabPers.add(new Ennemi(this, "ennemi", 3*nbCases/4, nbCases/4, tailleCase, delay));
+		tabPers.add(new Ennemi(this, "ennemi", nbCases/4, 3*nbCases/4, tailleCase, delay));
 		
 		this.pan=new Panneau(tailleCase, nbCases, tailleFenetre, tabPers, lab, flag); //Initialisation du panneau pan d'affichage
 		this.setContentPane(pan); //Affichage du panneau pan sur la fenetre 
@@ -156,7 +156,10 @@ public class Fenetre extends JFrame{
 	 * @param args
 	 */
 	public static void main(String[] args){
-		@SuppressWarnings("unused")
-		Fenetre fen = new Fenetre();
+		for(;;){
+			Fenetre fen = new Fenetre();
+			fen.dispose();
+		}
+		
 	}
 }
