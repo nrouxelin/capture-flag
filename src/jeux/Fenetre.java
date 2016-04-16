@@ -51,11 +51,11 @@ public class Fenetre extends JFrame{
 
 		/**
 		 * Les ennemis non-joueurs
-		 */
+		*/
 		tabPers.add(new Ennemi(this, "ennemi", 0, nbCases-1, tailleCase, delay));
 		tabPers.add(new Ennemi(this, "ennemi", nbCases-1, 0, tailleCase, delay));
-		tabPers.add(new Ennemi(this, "ennemi", 3*nbCases/4, nbCases/4, tailleCase, delay));
-		tabPers.add(new Ennemi(this, "ennemi", nbCases/4, 3*nbCases/4, tailleCase, delay));
+		//tabPers.add(new Ennemi(this, "ennemi", 3*nbCases/4, nbCases/4, tailleCase, delay));
+		//tabPers.add(new Ennemi(this, "ennemi", nbCases/4, 3*nbCases/4, tailleCase, delay));
 		
 		this.pan=new Panneau(tailleCase, nbCases, tailleFenetre, tabPers, lab, flag); //Initialisation du panneau pan d'affichage
 		this.setContentPane(pan); //Affichage du panneau pan sur la fenetre 
@@ -126,7 +126,7 @@ public class Fenetre extends JFrame{
 	}
 	
 	/**
-	 * vérifi si un mouvement est valide
+	 * vérifie si un mouvement est valide
 	 * @param x position en x sur le labyrinthe
 	 * @param y Position en y
 	 * @param dX Déplacement en x

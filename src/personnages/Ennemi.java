@@ -35,11 +35,7 @@ public class Ennemi extends Personnage implements Comportement{
 			else if(alea==1) deplacer(0,1);
 			else if(alea==2) deplacer(-1,0);
 			else if(alea==3) deplacer(0,-1);
-			try {
-				Thread.sleep(delay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			fairePause(delay);
 		}
 	}
 	

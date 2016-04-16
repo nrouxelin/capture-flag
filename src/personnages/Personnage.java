@@ -17,7 +17,7 @@ public abstract class Personnage{
 	protected int posX,posY; //position sur la fenêtre
 	Fenetre fen;
 	protected ArrayList<Image> sprites = new ArrayList<Image>() ; 
-	protected boolean enVie=true;
+	protected boolean deplacable=true;
 	protected Image sprite;
 	protected int delay;
 	protected int pause; 
@@ -68,7 +68,7 @@ public abstract class Personnage{
 	 * @param dY En y
 	 */
 	protected synchronized void deplacer(int dX, int dY){
-		if(fen.moveIsOk(x,y,dX,dY)&&(enVie)){
+		if(fen.moveIsOk(x,y,dX,dY)&&(deplacable)){
 			Thread t = new Thread(new ThreadDeplacer(dX, dY));
 			t.start();
 		}
@@ -121,12 +121,12 @@ public abstract class Personnage{
 	 * @param ind indice du joueur à tuer
 	 */
 	public void mourir(int ind){
-		enVie=false;
+		deplacable=false;
 		Thread t = new Thread(new ThreadMourir(ind));
 		t.start();
 	}
 	
-	private void fairePause(int temps){
+	protected void fairePause(int temps){
 		try {
 			Thread.sleep(temps);
 			} catch (InterruptedException e) {
@@ -158,7 +158,7 @@ public abstract class Personnage{
 	}
 	
 	public boolean getEnVie(){
-		return enVie;
+		return deplacable;
 	}
 	
 	/**
